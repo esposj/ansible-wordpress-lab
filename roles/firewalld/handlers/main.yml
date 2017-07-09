@@ -1,0 +1,6 @@
+---
+# handlers file for firewalld
+- name: reload firewalld
+  service: 
+    name: firewalld
+    state: reloaded

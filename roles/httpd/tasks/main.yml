@@ -1,0 +1,42 @@
+---
+# tasks file for httpd
+- name: install package
+  package:
+    name: httpd
+    state: latest
+
+- name: configure service
+  service: 
+    name: httpd
+    state: started
+    enabled: true
+
+- name: configure vhost
+  template:
+    src: templates/vhost.j2
+    dest: /etc/httpd/conf.d/{{http_vhost}}.conf
+  notify: apache_restart
+
+- name: configure docroot basedir
+  file: 
+    name: /var/www/vhosts/
+    state: directory
+    owner: root
+    group: root
+    mode: 0755
+
+- name: configure vhost directory
+  file:
+    name: /var/www/vhosts/{{http_vhost}}
+    state: directory
+    owner: apache
+    group: apache
+    mode: 0755
+
+- name: install default index.html file
+  copy:
+    content: "{{http_vhost}}"
+    dest: /var/www/vhosts/{{http_vhost}}/index.html
+    owner: apache
+    group: apache
+    mode: 0755

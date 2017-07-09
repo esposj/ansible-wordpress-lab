@@ -1,0 +1,6 @@
+---
+# defaults file for haproxy
+ha_pool: app
+ha_listenport: 80
+ha_memberport: 80
+

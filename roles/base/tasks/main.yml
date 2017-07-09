@@ -1,0 +1,69 @@
+---
+
+#packages for all servers
+- name: install epel
+  package:
+    name: epel-release
+    state: latest
+- name: check for IUS
+  shell: yum repolist | egrep -i ius
+  register: ius_installed
+  ignore_errors: true
+
+- name: install ius
+  package:
+    name: https://centos7.iuscommunity.org/ius-release.rpm
+    state: latest
+  when: ius_installed.rc != 0
+  
+- name: install common utilities
+  package: 
+    name: "{{item}}"
+
+    state: latest
+  with_items:
+    - htop
+    - strace
+    - glances
+    - git
+    - vim
+    - tmux
+    - iotop
+    - nload
+    - atop
+    - net-tools
+  
+#motd for all servers
+- name: update motd
+  copy:
+    src: files/motd
+    dest: /etc/motd
+    owner: root
+    group: root
+    mode: 0644
+
+
+#system tuning for all servers
+#
+- name: fix typeo in update swappiness
+  lineinfile: 
+    path: /etc/sysctl.d/99-sysctl.conf
+    regexp: "^vm-swappiness = 0"
+    state: absent
+
+- name: fix another typeo update swappiness
+  lineinfile: 
+    path: /etc/sysctl.d/99-sysctl.conf
+    regexp: "^vm-swapiness = 0"
+    state: absent
+
+- name: fix another typeo update swappiness
+  lineinfile: 
+    path: /etc/sysctl.d/99-sysctl.conf
+    regexp: "^vm.swappiness = 0"
+    line: "vm.swappiness = 0"
+  register: sysctl_change
+
+- name: update sysctl settings
+  shell: sysctl -p
+  when: sysctl_change.changed 

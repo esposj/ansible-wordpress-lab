@@ -1,0 +1,10 @@
+[load_balancers]
+wp-haproxy.j-espo.com
+
+[db_servers]
+wp-db.j-espo.com
+
+[web_servers]
+wp-web1.j-espo.com
+wp-web2.j-espo.com
+

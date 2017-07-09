@@ -1,0 +1,19 @@
+---
+- name: install firewalld package
+  package: 
+    name: firewalld
+    state: latest
+
+- name: configure firewalld service
+  service:
+    name: firewalld
+    state: started
+    enabled: true
+
+- name: "open ports for service {{ fw-service }}"
+  firewalld:
+    service: "{{ fwservice }}"
+    permanent: true
+    immediate: true
+    state: enabled
+   

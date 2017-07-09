@@ -1,0 +1,12 @@
+<VirtualHost *:{{http_port}}>
+    ServerAdmin {{http_email}}
+    ServerName {{http_vhost}}
+    ErrorLog logs/{{http_vhost}}-error.log
+    CustomLog logs/{{http_vhost}}-common.log common
+    DocumentRoot /var/www/vhosts/{{http_vhost}}/
+    <Directory /var/www/vhosts/{{http_vhost}}/>
+        Options +Indexes +FollowSymlinks +Includes
+        Order allow,deny
+        Allow from all
+    </Directory>
+</VirtualHost>  

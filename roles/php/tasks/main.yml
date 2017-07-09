@@ -1,0 +1,12 @@
+---
+# tasks file for php
+- name: install packages
+  package:
+    name: "{{ item }}"
+    state: latest
+  with_items:
+    - php
+    - php-mysql
+    - php-gd
+  notify: apache_restart
+
